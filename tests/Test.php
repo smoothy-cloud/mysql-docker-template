@@ -21,13 +21,13 @@ class Test extends TemplateTest
             'mysql_version' => '5.7',
             'mysql_root_password' => 'secret',
             'memory' => '2048',
-            'cpus' => '1',
+            'cpus' => '1000',
         ];
 
-        $this->deployApplication($variables);
+        $services = $this->deployApplication($variables);
         sleep(30);
 
-        $pdo = new PDO("mysql:host=127.0.0.1;port=10000", "root", "secret");
+        $pdo = new PDO("mysql:host=127.0.0.1;port={$services['mysql']}", "root", "secret");
         $version = $pdo->query("SELECT VERSION()")->fetch();
         $this->assertTrue(Str::startsWith($version[0], '5.7'));
     }
@@ -39,13 +39,13 @@ class Test extends TemplateTest
             'mysql_version' => '8.0',
             'mysql_root_password' => 'secret',
             'memory' => '2048',
-            'cpus' => '1',
+            'cpus' => '1000',
         ];
 
-        $this->deployApplication($variables);
+        $services = $this->deployApplication($variables);
         sleep(30);
 
-        $pdo = new PDO("mysql:host=127.0.0.1;port=10000", "root", "secret");
+        $pdo = new PDO("mysql:host=127.0.0.1;port={$services['mysql']}", "root", "secret");
         $version = $pdo->query("SELECT VERSION()")->fetch();
         $this->assertTrue(Str::startsWith($version[0], '8.0'));
     }

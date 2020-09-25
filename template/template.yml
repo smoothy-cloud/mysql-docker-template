@@ -44,7 +44,7 @@ form:
         hint: >
           The number of CPU cores allocated to the MySQL database.
         type: number
-        default: 1
+        default: 1000
 
 deployment:
   - resource: volume
@@ -52,13 +52,6 @@ deployment:
   - resource: container
     name: mysql
     image: mysql:{{ variable.mysql_version }}
-    endpoints:
-      - name: mysql_internal
-        type: container_port
-        port: 3306
-      - name: mysql_external
-        type: host_port
-        port: 3306
     volume_mounts:
       - volume: "{{ volume.mysql_data }}"
         mount_path: /var/lib/mysql
@@ -71,14 +64,13 @@ deployment:
       - part: --innodb-buffer-pool-size={{ (variable.memory * 0.8)|round * 1024 * 1024 }}
     memory: "{{ variable.memory }}"
     cpus:  "{{ variable.cpus }}"
+  - resource: service
+    name: mysql
+    title: MySQL database
+    container: "{{ container.mysql }}"
+    port: 3306
 
 interface:
-  endpoints:
-    show:
-      - title: Internal endpoint
-        endpoint: "{{ endpoint.mysql_internal }}"
-      - title: External endpoint
-        endpoint: "{{ endpoint.mysql_external }}"
   logs:
     - title: MySQL logs
       container: "{{ container.mysql }}"
