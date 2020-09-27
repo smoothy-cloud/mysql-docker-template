@@ -40,9 +40,9 @@ form:
         minimum: 1024
         default: 2048
       - variable: cpus
-        label: CPUs
+        label: CPU
         hint: >
-          The number of CPU cores allocated to the MySQL database.
+          The number of CPU millicores allocated to the MySQL database.
         type: number
         default: 1000
 
