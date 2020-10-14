@@ -51,7 +51,12 @@ deployment:
     name: mysql_data
   - resource: container
     name: mysql
-    image: mysql:{{ variable.mysql_version }}
+    image:
+      switch:
+        - case: "{{ variable.mysql_version == '5.7' }}"
+          value: mysql:5.7
+        - case: "{{ variable.mysql_version == '8.0' }}"
+          value: mysql:8.0
     volume_mounts:
       - volume: "{{ volume.mysql_data }}"
         mount_path: /var/lib/mysql
